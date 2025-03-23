@@ -3,7 +3,7 @@
 import { useState, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
-import { toast } from 'sonner'
+import { toast } from '@/components/ui/toast-wrapper'
 import { Loader2, ArrowLeft, Sparkles } from 'lucide-react'
 
 const fadeInUp = {
@@ -66,7 +66,7 @@ export default function VerifyPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-deep via-primary-purple to-primary-deep overflow-hidden relative">
+    <div className="min-h-screen bg-gradient-to-br from-[#303F9F] via-[#3949AB] to-[#5C6BC0] overflow-hidden relative">
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden">
         {[...Array(20)].map((_, i) => (
@@ -101,7 +101,7 @@ export default function VerifyPage() {
       >
         <div className="w-full max-w-md">
           <motion.div 
-            className="backdrop-blur-xl bg-white/10 rounded-2xl shadow-2xl p-8 border border-white/20"
+            className="backdrop-blur-xl bg-white/15 rounded-2xl shadow-2xl p-8 border border-white/20"
             variants={fadeInUp}
           >
             <motion.button
@@ -114,10 +114,13 @@ export default function VerifyPage() {
             </motion.button>
 
             <motion.div variants={fadeInUp} className="text-center mb-8">
-              <h1 className="text-4xl font-bold text-white mb-2 flex items-center justify-center gap-2">
-                Verify Email <Sparkles className="w-6 h-6 text-yellow-300" />
-              </h1>
-              <p className="text-white/80">
+              <div className="mb-4 flex items-center justify-center">
+                <h1 className="text-6xl font-cursive whitespace-nowrap">
+                  <span className="logo-first-letter logo-color">F</span><span className="logo-color">reeflow</span>
+                </h1>
+              </div>
+              <h2 className="text-2xl font-semibold text-white/90 mt-4">Verify Email</h2>
+              <p className="text-white/80 mt-2">
                 Enter the verification code sent to your email
               </p>
             </motion.div>
@@ -128,11 +131,14 @@ export default function VerifyPage() {
                   key={index}
                   type="text"
                   maxLength={1}
-                  ref={el => inputs.current[index] = el}
+                  ref={(el) => {
+                    inputs.current[index] = el;
+                    return undefined;
+                  }}
                   value={digit}
                   onChange={e => handleChange(e.target, index)}
                   onKeyDown={e => handleKeyDown(e, index)}
-                  className="w-12 h-14 text-center bg-white/10 border border-white/20 rounded-lg focus:ring-2 focus:ring-primary-purple focus:border-transparent text-white text-lg backdrop-blur-sm transition-all"
+                  className="w-12 h-14 text-center bg-white/10 border border-white/20 rounded-lg focus:ring-2 focus:ring-[#9FA8DA] focus:border-transparent text-white text-lg backdrop-blur-sm transition-all"
                   disabled={isLoading}
                 />
               ))}
@@ -142,7 +148,7 @@ export default function VerifyPage() {
               <button
                 onClick={handleSubmit}
                 disabled={isLoading || otp.some(digit => !digit)}
-                className="w-full bg-white/10 hover:bg-white/20 text-white py-3 px-4 rounded-lg transition-all transform hover:scale-[1.02] active:scale-[0.98] backdrop-blur-sm border border-white/20 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-gradient-to-r from-[#7986CB] to-[#9FA8DA] text-white py-3 px-4 rounded-lg transition-all transform hover:scale-[1.02] active:scale-[0.98] backdrop-blur-sm border border-white/10 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isLoading ? (
                   <Loader2 className="w-5 h-5 animate-spin mx-auto" />

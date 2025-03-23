@@ -1,6 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Russo+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Style+Script&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Ananda+Pro:ital,wght@1,600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Tangerine:wght@700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --primary-deep: #303F9F;
+  --primary-rich-blue: #3949AB;
+  --primary-mid-blue: #5C6BC0;
+  --accent-blue-1: #7986CB;
+  --accent-blue-2: #9FA8DA;
+  --highlight-blue-1: #C5CAE9;
+  --highlight-blue-2: #E8EAF6;
+  --highlight-silver: #F5F5F5;
+  --text-white: #F8F9FA;
+}
 
 @layer base {
   :root {
@@ -125,4 +151,27 @@
 
 .overflow-x-auto::-webkit-scrollbar-thumb:hover {
   background-color: rgba(90, 93, 97, 0.8);
+}
+
+.font-cursive {
+  font-family: 'Tangerine', cursive;
+  font-weight: 700;
+  font-style: normal;
+  letter-spacing: -0.01em;
+  text-transform: none;
+  line-height: 1;
+}
+
+/* Style for the first letter to make it stand out */
+.logo-first-letter {
+  display: inline-block;
+  transform: translateY(-0.02em);
+  margin-right: -0.1em;
+  text-shadow: 0 0 15px rgba(197, 202, 233, 0.8);
+}
+
+/* Remove the gradient class and replace with a single standout color */
+.logo-color {
+  color: white; /* Pure white for maximum visibility */
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
 }

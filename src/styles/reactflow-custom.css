@@ -1,0 +1,48 @@
+/* Custom styles for React Flow Controls */
+
+.react-flow-controls-blue button {
+  color: #4263eb !important;
+  fill: #4263eb !important;
+  stroke: #4263eb !important;
+}
+
+.react-flow-controls-blue button svg {
+  color: #4263eb !important;
+  fill: #4263eb !important;
+  stroke: #4263eb !important;
+}
+
+.react-flow-controls-blue button:hover {
+  background-color: rgba(66, 99, 235, 0.1) !important;
+}
+
+.react-flow-controls-blue button:active,
+.react-flow-controls-blue button:focus {
+  background-color: rgba(66, 99, 235, 0.2) !important;
+  outline: none !important;
+}
+
+/* Highlight for the interactive toggle when active/locked */
+.react-flow__controls-interactive[data-active="false"] {
+  background-color: rgba(66, 99, 235, 0.2) !important;
+  color: #4263eb !important;
+}
+
+.react-flow__controls-interactive {
+  transition: background-color 0.2s ease !important;
+}
+
+.react-flow-controls-blue .react-flow__controls-button {
+  border-bottom: 1px solid rgba(66, 99, 235, 0.1) !important;
+}
+
+/* Ensure the controls are visible and stand out */
+.react-flow-controls-blue {
+  opacity: 1 !important;
+}
+
+/* Add additional visibility improvements */
+.react-flow__controls {
+  border: 1px solid rgba(66, 99, 235, 0.3) !important;
+  box-shadow: 0 4px 12px rgba(66, 99, 235, 0.3) !important;
+} 

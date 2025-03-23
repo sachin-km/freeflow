@@ -1,7 +1,12 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { Toaster } from 'sonner'
+import dynamic from "next/dynamic";
+
+// Import ToastWrapper with dynamic import to avoid SSR
+const ToastWrapper = dynamic(() => import('@/components/ui/toast-wrapper'), {
+  ssr: false,
+});
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -22,7 +27,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.variable} font-sans antialiased`}>
         {children}
-        <Toaster position="top-center" />
+        <ToastWrapper />
       </body>
     </html>
   );

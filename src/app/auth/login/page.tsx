@@ -5,9 +5,9 @@ import { motion } from 'framer-motion'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
-import { Loader2, Sparkles, Zap, Users, Layout } from 'lucide-react'
+import { Loader2, Zap, Users, Layout, Sparkles } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { toast } from 'sonner'
+import { toast } from '@/components/ui/toast-wrapper'
 
 const formSchema = z.object({
   email: z.string().email('Please enter a valid email address'),
@@ -58,7 +58,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-deep via-primary-purple to-primary-deep overflow-hidden relative">
+    <div className="min-h-screen bg-gradient-to-br from-[#303F9F] via-[#3949AB] to-[#5C6BC0] overflow-hidden relative">
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden">
         {[...Array(20)].map((_, i) => (
@@ -93,15 +93,18 @@ export default function LoginPage() {
       >
         <div className="w-full max-w-md">
           <motion.div 
-            className="backdrop-blur-xl bg-white/10 rounded-2xl shadow-2xl p-8 border border-white/20"
+            className="backdrop-blur-xl bg-white/15 rounded-2xl shadow-2xl p-8 border border-white/20"
             variants={fadeInUp}
           >
             <motion.div variants={fadeInUp} className="text-center mb-8">
-              <h1 className="text-4xl font-bold text-white mb-2 flex items-center justify-center gap-2">
-                FreeFlow <Sparkles className="w-6 h-6 text-yellow-300" />
-              </h1>
-              <p className="text-white/80">
+              <div className="mb-4 flex items-center justify-center">
+                <h1 className="text-6xl font-cursive whitespace-nowrap">
+                  <span className="logo-first-letter logo-color">F</span><span className="logo-color">reeflow</span>
+                </h1>
+              </div>
+              <p className="text-white/80 flex items-center justify-center gap-1">
                 Create intelligent flowcharts with AI
+                <Zap className="w-4 h-4 text-yellow-300" />
               </p>
             </motion.div>
 
@@ -117,7 +120,7 @@ export default function LoginPage() {
                 <input
                   {...form.register('email')}
                   type="email"
-                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg focus:ring-2 focus:ring-primary-purple focus:border-transparent text-white placeholder-white/50 backdrop-blur-sm transition-all"
+                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg focus:ring-2 focus:ring-[#9FA8DA] focus:border-transparent text-white placeholder-white/50 backdrop-blur-sm transition-all"
                   placeholder="you@example.com"
                   disabled={isLoading}
                 />
@@ -131,7 +134,7 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-white/10 hover:bg-white/20 text-white py-3 px-4 rounded-lg transition-all transform hover:scale-[1.02] active:scale-[0.98] backdrop-blur-sm border border-white/20 font-medium"
+                className="w-full bg-gradient-to-r from-[#7986CB] to-[#9FA8DA] text-white py-3 px-4 rounded-lg transition-all transform hover:scale-[1.02] active:scale-[0.98] backdrop-blur-sm border border-white/10 font-medium"
               >
                 {isLoading ? (
                   <Loader2 className="w-5 h-5 animate-spin mx-auto" />
@@ -150,11 +153,11 @@ export default function LoginPage() {
                 <h3 className="font-medium text-white text-sm">AI-Powered</h3>
               </div>
               <div className="p-4 rounded-lg bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 transition-all transform hover:scale-[1.02]">
-                <Users className="w-6 h-6 text-blue-300 mx-auto mb-2" />
+                <Users className="w-6 h-6 text-sky-300 mx-auto mb-2" />
                 <h3 className="font-medium text-white text-sm">Collaborative</h3>
               </div>
               <div className="p-4 rounded-lg bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 transition-all transform hover:scale-[1.02]">
-                <Layout className="w-6 h-6 text-green-300 mx-auto mb-2" />
+                <Layout className="w-6 h-6 text-purple-200 mx-auto mb-2" />
                 <h3 className="font-medium text-white text-sm">Templates</h3>
               </div>
             </motion.div>

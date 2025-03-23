@@ -1,0 +1,75 @@
+####Product Requirements Document: Freeflow Flowchart Components
+Refer to https://reactflow.dev for reactflow documentation
+####Core Definitions
+##Element (Custom Node)
+A customizable React Flow node that serves as the building block for creating flowcharts in Freeflow.
+##Features:
+Four shape variations: Rectangle, Circle, Square, and Rhombus
+Connection handles on all four sides (top, bottom, left, right)
+Editable text input field that expands with content
+Dynamic resizing based on content
+Theme customization support
+Default styling aligned with React Flow documentation
+##Connector (Custom Edge)
+A customizable connection between Elements with multiple display options.
+Features:
+Multiple edge styles: Sinusoidal (Wavy), Step, Forward Arrow, Backward Arrow, and Text Input
+Right-click context menu for changing edge styles
+Theme customization support
+Default styling aligned with React Flow documentation
+####Implementation Plan
+##1. Set Up Custom Node Framework
+Create a base Element component with common functionality
+Implement the four handle positions (top, bottom, left, right)
+Add editable text input field with auto-expansion
+Create dynamic resizing based on content
+Add theme property integration for styling
+##2. Implement Shape Variations
+Create Rectangle Element component
+Create Circle Element component
+Create Square Element component
+Create Rhombus Element component
+Ensure all shapes maintain the core functionality
+###3. Develop Custom Edge Framework
+Create a base Connector component with common functionality
+Implement path generation using React Flow's utility functions
+Add theme property integration for styling
+Ensure proper connection to source and target handles
+##4. Implement Edge Style Variations
+Create Sinusoidal (Wavy) edge style
+Create Step edge style
+Create Forward Arrow edge style
+Create Backward Arrow edge style
+Create Text Input edge style with editable field
+##5. Develop Context Menu for Edges
+Create right-click event handler for edges
+Design and implement context menu UI
+Add style switching functionality
+Ensure proper state updates when styles change
+##6. Integrate with Toolbar
+Create Element icon for the Toolbar
+Implement shape selection dropdown/menu
+Add node creation functionality when shape is selected
+Position new nodes appropriately in viewport
+##7. Implement Theme Integration
+Define theme interface with color properties
+Create a theme context provider
+Implement theme application to Elements and Connectors
+Ensure all components respond to theme changes
+##8. Add User Interaction Polish
+Implement smooth animations for state changes
+Add hover effects for interactive elements
+Ensure proper focus states for accessibility
+Validate that all interactions work as expected
+##9. Testing and Refinement
+Test all shape variations with different content lengths
+Verify all edge styles render correctly
+Confirm context menu works properly
+Validate theme changes apply correctly to all components
+Check that toolbar integration works smoothly
+##10. Documentation and Finalization
+Document component APIs
+Create usage examples
+Finalize styling and interactions
+Optimize performance for large flowcharts
+This implementation plan provides a structured approach to developing the core flowchart components for Freeflow, ensuring that all requirements are met while maintaining a clean, modular architecture that supports future enhancements.

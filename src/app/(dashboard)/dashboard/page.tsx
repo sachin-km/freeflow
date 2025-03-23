@@ -10,37 +10,43 @@ import {
   ArrowRight
 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import { createNewProject } from '@/lib/projectStorage'
 
 const categories = [
   {
     icon: Zap,
     title: 'Quick-start AI Templates',
     description: 'Get started quickly with AI-powered templates',
-    color: 'from-purple-500 to-blue-500'
+    color: 'from-purple-500 to-blue-500',
+    projectType: 'flowchart'
   },
   {
     icon: GitBranch,
     title: 'Process Flows',
     description: 'Map out your business processes efficiently',
-    color: 'from-blue-500 to-cyan-500'
+    color: 'from-blue-500 to-cyan-500',
+    projectType: 'processflow'
   },
   {
     icon: Network,
     title: 'Organization Charts',
     description: 'Visualize your team structure',
-    color: 'from-cyan-500 to-teal-500'
+    color: 'from-cyan-500 to-teal-500',
+    projectType: 'orgchart'
   },
   {
     icon: Brain,
     title: 'Mind Maps',
     description: 'Organize your thoughts and ideas',
-    color: 'from-teal-500 to-green-500'
+    color: 'from-teal-500 to-green-500',
+    projectType: 'brainstorming'
   },
   {
     icon: Lightbulb,
     title: 'Brainstorming',
     description: 'Collaborate and ideate with your team',
-    color: 'from-green-500 to-yellow-500'
+    color: 'from-green-500 to-yellow-500',
+    projectType: 'brainstorming'
   }
 ]
 
@@ -67,9 +73,22 @@ const stagger = {
 export default function DashboardPage() {
   const router = useRouter()
 
-  const handleNewProject = () => {
-    const projectId = Math.random().toString(36).substr(2, 9)
-    router.push(`/workspace/${projectId}`)
+  const handleNewProject = async () => {
+    try {
+      const newProject = await createNewProject('Flowchart', 'flowchart')
+      router.push(`/workspace/${newProject.id}`)
+    } catch (error) {
+      console.error('Error creating new project:', error)
+    }
+  }
+
+  const handleCategoryClick = async (projectType: 'flowchart' | 'processflow' | 'orgchart' | 'brainstorming', title: string) => {
+    try {
+      const newProject = await createNewProject(title, projectType)
+      router.push(`/workspace/${newProject.id}`)
+    } catch (error) {
+      console.error(`Error creating ${projectType} project:`, error)
+    }
   }
 
   return (
@@ -89,7 +108,7 @@ export default function DashboardPage() {
       >
         <div className="max-w-2xl">
           <h1 className="text-4xl font-bold text-white mb-4">
-            Welcome to FreeFlow
+            Welcome to <span className="font-cursive logo-color"><span className="logo-first-letter">F</span>reeflow</span>
           </h1>
           <p className="text-white/80 text-lg mb-6">
             Create intelligent flowcharts with AI assistance. Get started by choosing a template or start from scratch.
@@ -143,9 +162,10 @@ export default function DashboardPage() {
           return (
             <motion.div
               key={index}
-              className="group relative overflow-hidden rounded-xl bg-white/10 backdrop-blur-xl border border-white/20 p-6 hover:bg-white/20 transition-colors"
+              className="group relative overflow-hidden rounded-xl bg-white/10 backdrop-blur-xl border border-white/20 p-6 hover:bg-white/20 transition-colors cursor-pointer"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
+              onClick={() => handleCategoryClick(category.projectType as 'flowchart' | 'processflow' | 'orgchart' | 'brainstorming', category.title)}
             >
               <div className={`absolute inset-0 bg-gradient-to-br ${category.color} opacity-0 group-hover:opacity-10 transition-opacity`} />
               
@@ -156,10 +176,10 @@ export default function DashboardPage() {
               <p className="text-white/70 mb-4">
                 {category.description}
               </p>
-              <button className="text-white/90 hover:text-white flex items-center gap-2 text-sm">
+              <div className="text-white/90 hover:text-white flex items-center gap-2 text-sm">
                 Get Started
                 <ArrowRight className="w-4 h-4" />
-              </button>
+              </div>
             </motion.div>
           )
         })}

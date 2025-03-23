@@ -1,9 +1,11 @@
 'use client'
 
+import { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
-import { FileIcon, Clock, ArrowRight, Loader2 } from 'lucide-react'
+import { FileIcon, Clock, ArrowRight, Loader2, Trash, GitBranch, Activity, Users, BrainCircuit } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { getRecentProjects, deleteProject } from '@/lib/projectStorage'
+import { Project } from '@/lib/projectStorage'
 
 const fadeInUp = {
   initial: { 
@@ -24,18 +26,86 @@ const fadeInUp = {
 
 export default function RecentsPage() {
   const router = useRouter()
-  const [isLoading, setIsLoading] = useState(false)
-
-  const handleNewProject = async () => {
+  const [isLoading, setIsLoading] = useState(true)
+  const [recentProjects, setRecentProjects] = useState<Project[]>([])
+  const [contextMenu, setContextMenu] = useState<{
+    show: boolean;
+    x: number;
+    y: number;
+    projectId: string;
+  }>({
+    show: false,
+    x: 0,
+    y: 0,
+    projectId: ''
+  })
+  
+  // Create ref for detecting clicks outside context menu
+  const contextMenuRef = useRef<HTMLDivElement>(null)
+  
+  // Load recent projects on component mount
+  useEffect(() => {
+    async function loadRecents() {
+      try {
+        setIsLoading(true)
+        const projects = await getRecentProjects()
+        setRecentProjects(projects)
+      } catch (error) {
+        console.error('Error loading recent projects:', error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    
+    loadRecents()
+  }, [])
+  
+  // Handle document click to close context menu
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (contextMenuRef.current && !contextMenuRef.current.contains(event.target as Node)) {
+        setContextMenu(prev => ({ ...prev, show: false }))
+      }
+    }
+    
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [])
+  
+  // Navigate to projects page
+  const navigateToProjects = () => {
+    router.push('/dashboard/projects')
+  }
+  
+  // Open an existing project
+  const openProject = (projectId: string) => {
+    router.push(`/workspace/${projectId}`)
+  }
+  
+  // Show context menu
+  const handleContextMenu = (e: React.MouseEvent, projectId: string) => {
+    e.preventDefault()
+    e.stopPropagation() // Prevent opening the project
+    setContextMenu({
+      show: true,
+      x: e.clientX,
+      y: e.clientY,
+      projectId
+    })
+  }
+  
+  // Delete a project
+  const handleDeleteProject = async (projectId: string) => {
     try {
-      setIsLoading(true)
-      const projectId = Math.random().toString(36).substr(2, 9)
-      console.log('Navigating to:', `/workspace/${projectId}`)
-      await router.push(`/workspace/${projectId}`)
+      await deleteProject(projectId)
+      // Update the projects list
+      setRecentProjects(recentProjects.filter(project => project.id !== projectId))
+      // Hide the context menu
+      setContextMenu(prev => ({ ...prev, show: false }))
     } catch (error) {
-      console.error('Navigation error:', error)
-    } finally {
-      setIsLoading(false)
+      console.error('Error deleting project:', error)
     }
   }
 
@@ -51,38 +121,101 @@ export default function RecentsPage() {
         <p className="text-white/60">Access your recently edited flowcharts</p>
       </motion.div>
 
-      {/* Empty State */}
-      <motion.div
+      {/* Recent Projects Grid */}
+      <motion.div 
         variants={fadeInUp}
-        className="bg-white/10 backdrop-blur-xl rounded-xl border border-white/20 p-12 text-center"
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
       >
-        <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-white/5 mb-4">
-          <Clock className="w-8 h-8 text-white/40" />
-        </div>
-        <h3 className="text-xl font-semibold text-white mb-2">No recent projects</h3>
-        <p className="text-white/60 mb-6">
-          Your recently edited projects will appear here
-        </p>
-        <motion.button
-          onClick={handleNewProject}
-          disabled={isLoading}
-          className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          whileHover={{ scale: isLoading ? 1 : 1.02 }}
-          whileTap={{ scale: isLoading ? 1 : 0.98 }}
-        >
-          {isLoading ? (
-            <>
-              <Loader2 className="w-4 h-4 animate-spin" />
-              Creating...
-            </>
-          ) : (
-            <>
-              Create New Project
-              <ArrowRight className="w-4 h-4" />
-            </>
-          )}
-        </motion.button>
+        {/* Loading State */}
+        {isLoading && (
+          <motion.div
+            className="aspect-video bg-white/5 backdrop-blur-xl rounded-xl border border-white/10 p-6 flex flex-col items-center justify-center"
+            variants={fadeInUp}
+          >
+            <div className="w-8 h-8 border-2 border-white/20 border-t-white/80 rounded-full animate-spin mb-4"></div>
+            <p className="text-white/60">Loading recent projects...</p>
+          </motion.div>
+        )}
+
+        {/* Recent Project Cards */}
+        {!isLoading && recentProjects.map((project) => (
+          <motion.div
+            key={project.id}
+            onClick={() => openProject(project.id)}
+            onContextMenu={(e) => handleContextMenu(e, project.id)}
+            className="aspect-video bg-white/5 backdrop-blur-xl rounded-xl border border-white/10 p-6 flex flex-col cursor-pointer hover:bg-white/10 transition-colors"
+            variants={fadeInUp}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            {/* Project Icon based on type */}
+            <div className="w-10 h-10 rounded-full flex items-center justify-center mb-4">
+              {project.type === 'flowchart' && <GitBranch className="w-5 h-5 text-blue-400" />}
+              {project.type === 'processflow' && <Activity className="w-5 h-5 text-green-400" />}
+              {project.type === 'orgchart' && <Users className="w-5 h-5 text-purple-400" />}
+              {project.type === 'brainstorming' && <BrainCircuit className="w-5 h-5 text-amber-400" />}
+            </div>
+            
+            {/* Project Details */}
+            <h3 className="text-lg font-semibold text-white mb-1">{project.name}</h3>
+            <p className="text-white/40 text-xs mb-4">
+              Last edited: {new Date(project.lastEdited).toLocaleDateString()}
+            </p>
+            
+            {/* Project Status */}
+            <div className="mt-auto flex items-center justify-between">
+              <div className="text-white/60 text-sm flex items-center">
+                <span className="mr-2">{project.type}</span>
+              </div>
+              <ArrowRight className="w-4 h-4 text-white/60" />
+            </div>
+          </motion.div>
+        ))}
+
+        {/* Empty State (shows only when there are no projects but we're done loading) */}
+        {!isLoading && recentProjects.length === 0 && (
+          <motion.div
+            onClick={navigateToProjects}
+            className="aspect-video bg-white/5 backdrop-blur-xl rounded-xl border border-white/10 p-6 flex flex-col items-center justify-center cursor-pointer hover:bg-white/10 transition-colors"
+            variants={fadeInUp}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mb-4">
+              <Clock className="w-6 h-6 text-white/40" />
+            </div>
+            <p className="text-white/40 text-center mb-2">
+              No recent projects
+            </p>
+            <p className="text-white/60 text-sm text-center">
+              Go to Your Projects to create a new one
+            </p>
+            <div className="mt-4 text-blue-400 text-sm font-medium">
+              View Your Projects
+            </div>
+          </motion.div>
+        )}
       </motion.div>
+      
+      {/* Context Menu */}
+      {contextMenu.show && (
+        <div 
+          ref={contextMenuRef}
+          className="fixed bg-slate-800 border border-white/10 rounded-md shadow-lg p-1 z-50 min-w-[160px]" 
+          style={{ 
+            left: `${contextMenu.x}px`, 
+            top: `${contextMenu.y}px` 
+          }}
+        >
+          <button 
+            onClick={() => handleDeleteProject(contextMenu.projectId)}
+            className="w-full text-left p-2 rounded hover:bg-white/10 text-white text-sm flex items-center gap-2"
+          >
+            <Trash size={14} className="text-red-400" />
+            Delete Project
+          </button>
+        </div>
+      )}
     </motion.div>
   )
 } 

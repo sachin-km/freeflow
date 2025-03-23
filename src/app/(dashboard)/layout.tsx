@@ -10,10 +10,12 @@ import {
   ChevronLeft, 
   PlusCircle,
   MessageSquareMore,
-  LogOut
+  LogOut,
+  Sparkles
 } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter, usePathname } from 'next/navigation'
+import { createNewProject } from '@/lib/projectStorage'
 
 const navItems = [
   { icon: Home, label: 'Home', href: '/dashboard' },
@@ -35,14 +37,19 @@ export default function DashboardLayout({
     router.push('/auth/login')
   }
 
-  const handleNewProject = () => {
-    // Generate a unique project ID - in production this would come from your backend
-    // const projectId = Math.random().toString(36).substr(2, 9)
-    router.push(`/workspace/new`)
+  const handleNewProject = async () => {
+    try {
+      // Create a new flowchart project directly
+      const newProject = await createNewProject('Flowchart', 'flowchart')
+      // Navigate to the workspace with the new project ID
+      router.push(`/workspace/${newProject.id}`)
+    } catch (error) {
+      console.error('Error creating project:', error)
+    }
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-deep to-primary-purple">
+    <div className="min-h-screen bg-gradient-to-br from-[#303F9F] to-[#5C6BC0]">
       {/* Sidebar */}
       <motion.div 
         className={`fixed left-0 top-0 h-full bg-white/10 backdrop-blur-xl border-r border-white/20 transition-all duration-300 ${
@@ -62,10 +69,23 @@ export default function DashboardLayout({
             }`} />
           </motion.button>
 
+          {/* Logo */}
+          {!isCollapsed && (
+            <div className="mb-6 text-center">
+              <div className="flex items-center justify-center">
+                <div className="flex items-center">
+                  <h1 className="text-4xl font-cursive whitespace-nowrap">
+                    <span className="logo-first-letter logo-color text-white">F</span><span className="logo-color text-white">reeflow</span>
+                  </h1>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* New Project Button */}
           <motion.button
             onClick={handleNewProject}
-            className="w-full bg-gradient-to-r from-primary-purple to-[#06B6D4] text-white rounded-lg p-3 flex items-center gap-2 mb-8"
+            className="w-full bg-gradient-to-r from-[#7986CB] to-[#9FA8DA] text-white rounded-lg p-3 flex items-center gap-2 mb-8"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
@@ -124,7 +144,7 @@ export default function DashboardLayout({
 
       {/* AI Assistant Chat Bubble */}
       <motion.button
-        className="fixed bottom-8 right-8 bg-gradient-to-r from-primary-purple to-[#06B6D4] text-white rounded-full p-4 shadow-lg"
+        className="fixed bottom-8 right-8 bg-gradient-to-r from-[#7986CB] to-[#9FA8DA] text-white rounded-full p-4 shadow-lg"
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         initial={{ opacity: 0, y: 20 }}
