@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Zain&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
@@ -154,10 +155,10 @@
 }
 
 .font-cursive {
-  font-family: 'Tangerine', cursive;
-  font-weight: 700;
+  font-family: 'Zain', sans-serif;
+  font-weight: 400;
   font-style: normal;
-  letter-spacing: -0.01em;
+  letter-spacing: 0;
   text-transform: none;
   line-height: 1;
 }
@@ -165,13 +166,18 @@
 /* Style for the first letter to make it stand out */
 .logo-first-letter {
   display: inline-block;
-  transform: translateY(-0.02em);
-  margin-right: -0.1em;
-  text-shadow: 0 0 15px rgba(197, 202, 233, 0.8);
+  margin-right: 0;
 }
 
-/* Remove the gradient class and replace with a single standout color */
+/* Logo color styling */
 .logo-color {
-  color: white; /* Pure white for maximum visibility */
-  text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+  color: white;
+  text-shadow: none;
+}
+
+/* Add specific styling for the dashboard logo */
+.dashboard-logo {
+  font-size: 2rem;
+  text-transform: none;
+  letter-spacing: 0.02em;
 }

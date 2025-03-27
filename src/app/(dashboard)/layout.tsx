@@ -75,7 +75,7 @@ export default function DashboardLayout({
               <div className="flex items-center justify-center">
                 <div className="flex items-center">
                   <h1 className="text-4xl font-cursive whitespace-nowrap">
-                    <span className="logo-first-letter logo-color text-white">F</span><span className="logo-color text-white">reeflow</span>
+                    <span className="logo-first-letter logo-color text-white">F</span><span className="logo-color text-white">reeFlow</span>
                   </h1>
                 </div>
               </div>

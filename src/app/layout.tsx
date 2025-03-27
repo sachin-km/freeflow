@@ -20,15 +20,15 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: {
+  children: React.ReactNode
+}) {
   return (
-    <html lang="en">
-      <body className={`${inter.variable} font-sans antialiased`}>
+    <html lang="en" className={`${inter.variable} font-sans antialiased`}>
+      <body>
         {children}
         <ToastWrapper />
       </body>
     </html>
-  );
+  )
 }
